@@ -1,0 +1,22 @@
+{
+    "name":"Anime Monkey 2",
+    "version":"1.0",
+    "browser_action":
+    {
+      "default_popup": "./index.html",
+      "default_title": "Anime Monkey 2"
+      
+    },
+    "manifest_version": 2,
+    "permissions":
+    [
+      "alarms", 
+      "notifications",
+      "background"
+    ],
+    "background": 
+    {
+      "scripts": ["background.js"],
+      "persistent": true
+    }
+}
