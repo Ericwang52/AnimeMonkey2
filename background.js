@@ -1,32 +1,88 @@
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse){
-        var username= request.user;
-        console.log(username);
-        var url= "https://api.jikan.moe/v3/user/"+username+"/animelist/watching";
-        var req = new XMLHttpRequest;
-        req.open("GET", url, true);
+// chrome.runtime.onMessage.addListener(
+//     function(request, sender, sendResponse){
+//         var username= request.user;
+//         console.log(username);
+//         var url= "https://api.jikan.moe/v3/user/"+username+"/animelist/watching";
+//         var req = new XMLHttpRequest;
+//         req.open("GET", url, true);
     
-        req.onload = () =>
-        {
-            if (req.status != 200 && req.readyState != 1)
-            {
-                console.log("error");
-            }
-            else
-            {
-                data = JSON.parse(req.responseText);
-                console.log(req.responseText);
-                console.log("response sending");
-                sendResponse({"test":"Is this even sending"});
-            }
-        };
+//         req.onload = () =>
+//         {
+//             if (req.status != 200 && req.readyState != 1)
+//             {
+//                 console.log("error");
+//             }
+//             else
+//             {
+//                 data = JSON.parse(req.responseText);
+//                 console.log(req.responseText);
+//                 console.log("response sending");
+//                 sendResponse({"test":"Is this even sending"});
+//             }
+//         };
     
-        req.onerror = function()
-        {
+//         req.onerror = function()
+//         {
     
-        };
+//         };
     
-        req.send();
-        //return true;
-    });
+//         req.send();
+//         //return true;
+//     });
 
+chrome.runtime.onMessage.addListener(
+    function (req, send, sendResp){
+        console.log(req);
+        var day=0;
+        switch (req.day) {
+            case "sunday":
+              day = 0;
+              break;
+            case "monday":
+              day = 1;
+              break;
+            case "tuesday":
+               day = 2;
+              break;
+            case "wednesday":
+              day = 3;
+              break;
+            case "thursday":
+              day = 4;
+              break;
+            case "friday":
+              day = 5;
+              break;
+            case "saturday":
+              day = 6;
+          }
+        var hour=req.time.substring(0, 2);
+        var min=req.time.substring(3);
+        var sec=10;
+        var millisec=0;
+
+        var d= new Date()
+        d.setDate(d.getDate() +(day+7-d.getDay())%7);
+        d.setHours(hour, min, sec, millisec);
+        console.log(d.getDate());
+        console.log(d.getHours());
+        console.log(d.getMinutes());
+        console.log(d.getSeconds());
+        var x= d.valueOf();
+        console.log(x);
+        chrome.alarms.create('anime', {when: Date.now()+2000});
+        chrome.alarms.getAll(function(list) { console.log(list); });
+    }
+)
+function broadcastDay(day, time){
+
+}
+chrome.alarms.onAlarm.addListener(function(alarm) {
+    console.log('Triggered');
+    console.log(alarm.name);
+    var opt= {type: 'basic', 
+    iconUrl: './download.jpeg', title: alarm.name, 
+    message: 'Game in 1 hour!', contextMessage: 'Enjoy the game!'}
+
+    chrome.notifications.create('notify1', opt, function(id) { console.log("Last error:", chrome.runtime.lastError); });
+});
