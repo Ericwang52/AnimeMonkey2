@@ -1,19 +1,14 @@
 document.addEventListener('DOMContentLoaded', function(){
-   document.getElementById("userform").addEventListener("submit", fetchData());
+   document.getElementById("userform").addEventListener("submit", fetchData, false);
    //fetchData();
 });
 
-function fetchData(){
-
-    console.log("awkgfaw");
-    var username= document.getElementById("userform").elements[0].value;
+function fetchData(event){
+    event.preventDefault();
+    event.target.value="";
+    var username= document.getElementById("username").value;
+    document.getElementById("username").value="";
     console.log(username);
-    // console.log("huerdur");
-    // chrome.runtime.sendMessage({user:username}, function(response){
-    //     console.log("hurdur");
-    //     x= response.test;
-    //     console.log(x);
-    // });
     var url= "https://api.jikan.moe/v3/user/"+username+"/animelist/watching";
     var req = new XMLHttpRequest;
     req.open("GET", url, true);
@@ -27,8 +22,7 @@ function fetchData(){
         else
         {
             data = JSON.parse(req.responseText);
-            console.log(req.responseText);
-            console.log("response pog");
+            data.anime.forEach(display);
         }
     };
 
@@ -38,4 +32,13 @@ function fetchData(){
     };
 
     req.send();
+}
+function display(animedata)
+{   
+
+    var animediv = document.createElement("div");
+    var anime= document.createElement("a");
+    anime.innerHTML= animedata.title;
+    animediv.appendChild(anime);
+    document.getElementById("Upcoming").appendChild(animediv)
 }
