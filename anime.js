@@ -9,10 +9,11 @@ function fetchData(event){
     var username= document.getElementById("username").value;
     document.getElementById("username").value="";
     console.log(username);
-    var url= "https://api.jikan.moe/v3/user/"+username+"/animelist/watching";
+   // var url= "https://api.jikan.moe/v3/user/"+username+"/animelist/watching";
+    var url = "https://cors-anywhere.herokuapp.com/https://api.myanimelist.net/v2/users/"+username+"/animelist?fields=list_status,broadcast";
     var req = new XMLHttpRequest;
     req.open("GET", url, true);
-
+    req.setRequestHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImJjMjU0ZjRmNzQ4YzQ5Y2VmNGE5YmJlZjZiYjdiNGNlMDdmN2E4MzZhN2EwNzVlODUwZTc0ZDAxYzQ5YjIwOGNjODI2ZDllZGU4MTZlNmFiIn0.eyJhdWQiOiI4MGM4NzZmNjBjMDZhY2NiNmI4ZGYwNjYxNjA2YmYzOSIsImp0aSI6ImJjMjU0ZjRmNzQ4YzQ5Y2VmNGE5YmJlZjZiYjdiNGNlMDdmN2E4MzZhN2EwNzVlODUwZTc0ZDAxYzQ5YjIwOGNjODI2ZDllZGU4MTZlNmFiIiwiaWF0IjoxNjA4Njc1Mjk2LCJuYmYiOjE2MDg2NzUyOTYsImV4cCI6MTYxMTM1MzY5Niwic3ViIjoiNjY1MjA4MCIsInNjb3BlcyI6W119.dbsOSO_NzAUSUv1u4oJQ5LB7hYdOBdfl6QvZqGXoSsRrNGSm7-MR0Df56DpOnHJr7RpaxOZ_G7Bur5hPSSqbTJhterCDSnVa9_jT_LhEIp4BSohDA59hwlb3hZP5B7h-uLu_ocVAHGO0Gs9YRXjz5v93s8VT321bKOhm3dzQY1YSXS1uwSoAorAVCP3DZ57DmCWcZVl6im6lM6q2pfXUrtkUbzv85DsNF6wqxot6etGBCbf0k8Or5bIS0IWywHUJ7MskY2nX4mLHwqkfffSNYzLyjw27s5c1GDkbt8QRPbdFQ95DJ4yKytPy32dxj1VsWtJSik0U3jzW52dgjnlb7w")
     req.onload = () =>
     {
         if (req.status != 200 && req.readyState != 1)
@@ -22,6 +23,7 @@ function fetchData(event){
         else
         {
             data = JSON.parse(req.responseText);
+            console.log(req.responseText);
             data.anime.forEach(display);
         }
     };
