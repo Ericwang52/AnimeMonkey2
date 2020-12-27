@@ -1,13 +1,23 @@
 document.addEventListener('DOMContentLoaded', function(){
-    if(document.cookie==""){
-        document.getElementById("userform").addEventListener("submit", setCookie, false);
-    }else{
-        document.getElementById("userform").remove();
-        var x = getCookie("username");
-        fetchData(x);
+    chrome.storage.sync.get("username",function (result){
+        console.log(result.username);
+        if(result.username==undefined){
+            document.getElementById("userform").addEventListener("submit", setCookie, false);
+        }else{
+            document.getElementById("userform").remove();
+            var x = result.username;
+            fetchData(x); 
+        }
+    });
+    // if(document.cookie==""){
+    //     document.getElementById("userform").addEventListener("submit", setCookie, false);
+    // }else{
+    //     document.getElementById("userform").remove();
+    //     var x = getCookie("username");
+    //     fetchData(x);
         
-    }
-    console.log(document.cookie=="");
+    // }
+    //console.log(document.cookie=="");
 
 
    //fetchData();
@@ -18,8 +28,8 @@ function fetchData(username){
   //  event.target.value="";
  //   var username= document.getElementById("username").value;
   //  document.getElementById("username").value="";
-    console.log(username);
-    console.log(document.cookie);
+   // console.log(username);
+   // console.log(document.cookie);
    // var url= "https://api.jikan.moe/v3/user/"+username+"/animelist/watching";
     var url = "https://cors-anywhere.herokuapp.com/https://api.myanimelist.net/v2/users/"+username+"/animelist?status=watching&fields=list_status,broadcast,status";
     var req = new XMLHttpRequest;
@@ -47,7 +57,7 @@ function fetchData(username){
     req.send();
 }
 function display(animedata)
-{   console.log(animedata.node.broadcast==undefined);
+{  // console.log(animedata.node.broadcast==undefined);
     if(animedata.node.broadcast!==undefined && animedata.node.status==="currently_airing"){
 
         var animediv = document.createElement("div");
@@ -76,7 +86,10 @@ function setCookie(event) {
     event.target.value="";
     var username= document.getElementById("username").value;
     document.getElementById("userform").remove(); // this should remove the thing
-    console.log(username);
+    chrome.storage.sync.set({"username": username}, function() {
+        console.log('Value is set to ' + username);
+      });
+    //console.log(username);
     var d = new Date();
     var cname="username";
     var cvalue= username;
@@ -87,7 +100,7 @@ function setCookie(event) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 
     document.cookie = cname + "=" + cvalue + ";";
-    console.log(document.cookie);
+   // console.log(document.cookie);
     fetchData(username);
 
   }

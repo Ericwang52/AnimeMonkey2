@@ -12,7 +12,8 @@
     [
       "alarms", 
       "notifications",
-      "background"
+      "background",
+      "storage"
     ],
     "background": 
     {
