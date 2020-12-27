@@ -56,33 +56,38 @@ chrome.runtime.onMessage.addListener(
             case "saturday":
               day = 6;
           }
-        var hour=req.time.substring(0, 2);
+        var hour=req.time.substring(0, 2)-9;
         var min=req.time.substring(3);
         var sec=10;
         var millisec=0;
 
-        var d= new Date()
+        var d= new Date();
         d.setDate(d.getDate() +(day+7-d.getDay())%7);
         d.setHours(hour, min, sec, millisec);
+        if(d.valueOf()<Date.now()){
+            d.setDate(d.getDate()+7);
+        }
+        console.log(day);
+
         console.log(d.getDate());
         console.log(d.getHours());
         console.log(d.getMinutes());
         console.log(d.getSeconds());
         var x= d.valueOf();
         console.log(x);
-        chrome.alarms.create('anime', {when: Date.now()+2000});
+        console.log(Date.now())
+        chrome.alarms.create('anime', {when: d.getTime()});
         chrome.alarms.getAll(function(list) { console.log(list); });
     }
 )
-function broadcastDay(day, time){
 
-}
 chrome.alarms.onAlarm.addListener(function(alarm) {
     console.log('Triggered');
     console.log(alarm.name);
+    alert("anime");
     var opt= {type: 'basic', 
-    iconUrl: './download.jpeg', title: alarm.name, 
-    message: 'Game in 1 hour!', contextMessage: 'Enjoy the game!'}
+    iconUrl: './images/download.jpeg', title: alarm.name, 
+    message: 'animeeee', contextMessage: 'awfawf'}
 
-    chrome.notifications.create('notify1', opt, function(id) { console.log("Last error:", chrome.runtime.lastError); });
+    chrome.notifications.create('notify1', opt);
 });
