@@ -61,18 +61,28 @@ function display(animedata)
     if(animedata.node.broadcast!==undefined && animedata.node.status==="currently_airing"){
 
         var animediv = document.createElement("div");
+        animediv.classList.add("anime");
         var anime= document.createElement("a");
+        anime.href= "https://4anime.to/anime/"+ animedata.node.title.replaceAll(" ", "-");
+        anime.target="_blank";
         var day= animedata.node.broadcast.day_of_the_week;
         var time= animedata.node.broadcast.start_time;
         var animetime= document.createElement("b");
-        animetime.innerHTML=day+time;
-        anime.innerHTML= animedata.node.title;
+        var picture=document.createElement("img");
+        picture.src=animedata.node.main_picture.medium;
+        animetime.innerHTML=timezone(day, time);
+        var title = document.createElement("p");
+        title.innerHTML= animedata.node.title;
+        //anime.innerHTML= animedata.node.title;
+        anime.appendChild(title);
+        anime.appendChild(picture);
         animediv.appendChild(anime);
         animediv.appendChild(animetime);
+       // animediv.appendChild(picture);
         document.getElementById("Upcoming").appendChild(animediv)
     
        // var request= {"day":day, "time":time};
-       var request= {"day":day, "time":time};
+       var request= {"day":day, "time":time, "title":animedata.node.title};
         chrome.runtime.sendMessage(request);
     }
     else{
@@ -80,7 +90,69 @@ function display(animedata)
     }
 
 }
+function timezone(date, time){
+    var day=0;
+    switch (date) {
+        case "sunday":
+          day = 0;
+          break;
+        case "monday":
+          day = 1;
+          break;
+        case "tuesday":
+           day = 2;
+          break;
+        case "wednesday":
+          day = 3;
+          break;
+        case "thursday":
+          day = 4;
+          break;
+        case "friday":
+          day = 5;
+          break;
+        case "saturday":
+          day = 6;
+      }
+      var hour=time.substring(0, 2)-14;
+      var min=time.substring(3);
+      var sec=0;
+      var millisec=0;
+      var d= new Date();
+      d.setDate(d.getDate() +(day+7-d.getDay())%7);
+      d.setHours(hour, min, sec, millisec);
+      switch(d.getDay()){
+        case 0:
+            day = "Sunday";
+            break;
+          case 1:
+            day = "Monday";
+            break;
+          case 2:
+             day = "Tuesday";
+            break;
+          case 3:
+            day = "Wednesday";
+            break;
+          case 4:
+            day = "Thursday";
+            break;
+          case 5:
+            day = "Friday";
+            break;
+          case 6:
+            day = "Saturday";
+      }
+      var minutes= "";
+      if (Math.floor(d.getMinutes()/10)==0){
+        minutes="0" + d.getMinutes();
+      }
+      else{
+          minutes=d.getMinutes();
+      }
+      return day+" "+ d.getHours() + ":"+ minutes;
 
+}
 function setCookie(event) {
     event.preventDefault();
     event.target.value="";

@@ -7,6 +7,12 @@
       "default_title": "Anime Monkey 2"
       
     },
+    "icons":
+    {
+      "16": "./images/hoopshub16.png",
+      "48": "./images/hoopshub48.png",
+      "128": "./images/hoopshub128.png"
+    },
     "manifest_version": 2,
     "permissions":
     [

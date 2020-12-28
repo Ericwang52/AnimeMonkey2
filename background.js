@@ -56,7 +56,8 @@ chrome.runtime.onMessage.addListener(
             case "saturday":
               day = 6;
           }
-        var hour=req.time.substring(0, 2)-9;
+        var hour=req.time.substring(0, 2)-14;
+        console.log(hour);
         var min=req.time.substring(3);
         var sec=10;
         var millisec=0;
@@ -66,8 +67,9 @@ chrome.runtime.onMessage.addListener(
         d.setHours(hour, min, sec, millisec);
         if(d.valueOf()<Date.now()){
             d.setDate(d.getDate()+7);
+            console.log("nextweeking");
         }
-        console.log(day);
+        console.log(d.getDay());
 
         console.log(d.getDate());
         console.log(d.getHours());
@@ -76,7 +78,9 @@ chrome.runtime.onMessage.addListener(
         var x= d.valueOf();
         console.log(x);
         console.log(Date.now())
-        chrome.alarms.create('anime', {when: d.getTime()});
+        console.log(req.title);
+
+        chrome.alarms.create(req.title, {when: d.getTime()});
         chrome.alarms.getAll(function(list) { console.log(list); });
     }
 )
