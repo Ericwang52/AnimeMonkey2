@@ -90,7 +90,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
     console.log(alarm.name);
     alert("anime");
     var opt= {type: 'basic', 
-    iconUrl: './images/download.jpeg', title: alarm.name, 
+    iconUrl: './images/icon128.png', title: alarm.name, 
     message: 'animeeee', contextMessage: 'awfawf'}
 
     chrome.notifications.create('notify1', opt);
